@@ -14,12 +14,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.myapplication.databinding.ActivityMainBinding
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var diceImage1 : ImageView
     lateinit var diceImage2 : ImageView
     lateinit var diceImage3 : ImageView
+    lateinit var roulette : ImageView
+    private var rotationDuration = 3000L // 初始旋转时间
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +36,26 @@ class MainActivity : AppCompatActivity() {
         val rollButton: Button = findViewById(R.id.roll_button)
         rollButton.setOnClickListener { rollDice() }
 
+        val scrollButton: Button = findViewById(R.id.scroll_button)
+        scrollButton.setOnClickListener { scrollDice() }
+
+        roulette = findViewById<ImageView>(R.id.roulette)
+
     }
-    private fun show() {
+    private fun scrollDice() {
+
+        // 增加旋转时间
+        rotationDuration = (1000..3000).random().toLong()
+        val randomDegrees = (720..2160).random() // 生成随机的旋转度数，范围从720到2160度
+        // 执行转盘旋转动画
+        val rotateAnimation = RotateAnimation(
+            0f, randomDegrees.toFloat(),
+            Animation.RELATIVE_TO_SELF, 0.5f,
+            Animation.RELATIVE_TO_SELF, 0.5f
+        )
+        rotateAnimation.duration = rotationDuration // 旋转时间
+        rotateAnimation.fillAfter = true // 设置保持最终状态
+        roulette.startAnimation(rotateAnimation)
 
     }
     private fun rollDice() {
